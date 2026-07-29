@@ -1,0 +1,106 @@
+{
+  "person": {
+    "name": "Abeer Nasir",
+    "title": "Generative AI Specialist & Digital Marketing Specialist",
+    "tagline": "Meta Ads, Shopify & AI automation that help D2C brands grow.",
+    "location": "Karachi Division, Sindh, Pakistan",
+    "phone": "+92 370 3159642",
+    "email": "nasirmeo5533@gmail.com",
+    "email2": "abeerinfo5566@gmail.com",
+    "whatsapp": "+923703159642",
+    "website": "https://open-agent-eight.vercel.app",
+    "social": {
+      "linkedin": "https://linkedin.com/in/abeer-nasir-3052b628a",
+      "twitter": "https://x.com/Abeergrowth",
+      "facebook": "https://www.facebook.com/profile.php?id=61572143246804",
+      "instagram": "https://www.instagram.com/growthbot_02/"
+    },
+    "photo": "images/abeer-founder.jpg",
+    "bio": "Abeer Nasir is a Generative AI Specialist and Digital Marketing Specialist who helps e-commerce and D2C brands grow with Meta Ads, Shopify, and AI automation. He started learning Generative AI in 2023 and Meta Ads even earlier. Since then he has helped brands grow with practical, measured campaigns — running small-budget Meta Ads tests and lead-generation campaigns with documented outcomes. He believes in real numbers, not vanity metrics.",
+    "story": "I started learning Generative AI in 2023 with one simple question: how can AI help businesses work better? I didn't have a traditional AI background and no fixed roadmap — so I learned by building. My first projects were rough, but each one taught me what actually works versus what just looks impressive. The learning curve was real: I broke campaigns, wrote weak prompts, and built automations that didn't fit how a business actually runs. Every mistake sharpened the next build. By 2024 I was taking on real clients — and that's where it clicked: businesses don't want 'AI for the sake of AI,' they want less manual work and more sales."
+  },
+  "agency": {
+    "name": "Open Agent",
+    "established": 2023,
+    "tagline": "AI-Powered Growth",
+    "description": "AI-powered digital marketing & business-growth team founded by Abeer Nasir. Focused, hands-on practice: you work directly with Abeer, not a layer of account managers. That's why results stay sharp and communication stays clear.",
+    "pricing": [
+      { "plan": "Starter", "price": "PKR 30,000/mo", "features": ["1 service line (e.g. Meta Ads OR AI automation)", "Weekly optimization", "Monthly report", "WhatsApp support"], "badge": null },
+      { "plan": "Premium", "price": "PKR 50,000/mo", "features": ["Up to 3 service lines", "Daily optimization", "Bi-weekly report + call", "Priority WhatsApp support"], "badge": "Most popular" },
+      { "plan": "Pro", "price": "PKR 80,000/mo", "features": ["Full stack: Ads + Shopify + AI", "Daily optimization + testing", "Weekly report + strategy call", "Priority support + on-call"], "badge": null }
+    ],
+    "refund": "4-day money-back guarantee — if you're not satisfied within the first 4 days, you get a full refund, no questions asked.",
+    "process": [
+      { "step": 1, "title": "Free strategy call", "description": "We talk goals, budget and where you're stuck — no pitch deck, just clarity." },
+      { "step": 2, "title": "Custom growth plan", "description": "I map the exact channels, creatives and automations for your brand." },
+      { "step": 3, "title": "Launch & optimize", "description": "Campaigns go live; I watch the numbers daily and tune for performance." },
+      { "step": 4, "title": "Monthly reporting", "description": "You get a plain-English report: what worked, what we're fixing, what's next." }
+    ]
+  },
+  "services": [
+    { "name": "Meta Ads", "description": "Facebook & Instagram campaigns planned, launched and optimized for ROAS. Audience research, creative testing, daily tuning. Not likes — real conversions.", "icon": "📊" },
+    { "name": "Shopify Development", "description": "Store setup, theme customization, product-page optimization and checkout fixes that lift conversion. From zero to a store that sells.", "icon": "🛒" },
+    { "name": "AI Automation", "description": "No-code workflows (Zapier/Make/n8n style) that automate lead capture, follow-ups, reporting and repetitive tasks. Built in days, not weeks.", "icon": "⚡" },
+    { "name": "AI Agents", "description": "Custom chatbots & virtual assistants built on LLMs (ChatGPT, Claude, Gemini) for customer support and lead generation.", "icon": "🤖" },
+    { "name": "AI Content", "description": "Ad creatives, social posts, email copy and blog content generated with AI and refined for your niche and brand voice.", "icon": "✍️" },
+    { "name": "Web Development", "description": "Fast, clean, mobile-first websites that load quick and convert. Same stack powering open-agent-eight.vercel.app.", "icon": "🌐" },
+    { "name": "Paid Ads — Google & Meta", "description": "Full-funnel paid media across Google Search, Google Display, Facebook & Instagram. Keyword and audience research, ad creative, bid strategy and weekly ROAS reporting.", "icon": "📈" },
+    { "name": "Social Media", "description": "Content calendars, organic growth and community management across Instagram, Facebook, X and LinkedIn — plus short-form video that builds your brand.", "icon": "📱" }
+  ],
+  "skills": [
+    { "category": "Generative AI", "items": ["Prompt Engineering", "AI Automation", "LLM Integration (ChatGPT, Gemini, Claude)", "AI Chatbots & Virtual Assistants", "Workflow Automation", "Open-Source LLMs"] },
+    { "category": "Digital Marketing", "items": ["Meta Ads (Facebook & Instagram)", "Google Ads", "Audience Research", "Creative Strategy", "ROAS Optimization", "Social Media Marketing"] },
+    { "category": "E-Commerce", "items": ["Shopify Store Setup", "Shopify Optimization", "Product Page CRO", "D2C Brand Strategy", "Perfume & Beauty Niche"] },
+    { "category": "Content", "items": ["AI-Assisted Content Creation", "Ad Copywriting", "Email Marketing", "Social Media Content", "Short-Form Video"] }
+  ],
+  "experience": [
+    { "role": "Generative AI Specialist", "type": "Self-employed", "period": "Mar 2024 — Present", "location": "Karachi", "details": ["Build AI-powered solutions with LLMs (ChatGPT, Gemini, Claude)", "Prompt engineering for business applications", "AI chatbots & virtual assistants for support & lead generation", "Automation workflows that cut manual work"] },
+    { "role": "Digital Marketing Specialist", "type": "Self-employed", "period": "Mar 2023 — Present", "location": "Karachi", "details": ["Plan, launch and optimize Meta Ads (Facebook & Instagram)", "Audience research, budget management, creative testing", "Shopify store optimization for e-commerce brands", "AI-assisted marketing content for perfume & beauty industry"] },
+    { "role": "Author & Educator", "type": "Ongoing", "period": "2024 — Present", "details": ["Wrote two free ebooks on Digital Marketing and Generative AI", "Helps beginners, business owners and marketers learn practical AI"] }
+  ],
+  "caseStudies": [
+    { "title": "Small-budget Meta Ads test for perfume D2C brand", "niche": "D2C perfume & beauty e-commerce", "audience": "Women 18–34 in Pakistan interested in fragrance & affordable luxury", "spend": "PKR 1,000", "result": "30 qualified inquiries", "roas": "~3x ROAS", "whatIdid": "Tight audience testing, fast creative iteration, daily bid/budget tuning on Meta Ads. UGC-style product reels with first-order discount hook.", "link": "https://open-agent-eight.vercel.app/case-studies.html" },
+    { "title": "Lead-generation test for local service business", "niche": "Local service business (appointment-based)", "audience": "City-level prospects searching for the service", "spend": "PKR 2,000", "result": "6 qualified leads", "roas": "~3x ROI vs guess", "whatIdid": "Focused campaign with strong offer and audience targeting on Meta, plus instant WhatsApp follow-up link.", "link": "https://open-agent-eight.vercel.app/case-studies.html" },
+    { "title": "Store optimization for perfume brand", "niche": "Perfume/D2C beauty on Shopify", "whatIdid": "Product-page cleanup, clearer CTAs, faster mobile checkout, AI-assisted content for collections.", "result": "Smoother buying experience, stronger on-brand storefront", "link": "https://open-agent-eight.vercel.app/case-studies.html" },
+    { "title": "Lead follow-up on autopilot", "niche": "Service founder drowning in manual replies", "whatIdid": "No-code workflow (LLM + form + WhatsApp) that sounds human. Captured, tagged and followed up with leads automatically.", "result": "~2 hours saved daily, no lead left cold", "link": "https://open-agent-eight.vercel.app/case-studies.html" }
+  ],
+  "testimonials": [
+    { "quote": "Abeer understood our perfume brand better than agencies that charged 10x. The Meta Ads work actually brought sales.", "author": "S. Khan", "title": "Beauty brand owner" },
+    { "quote": "The AI automation he built saves me 2 hours every day on client follow-ups. Simple, practical, done right.", "author": "M. Ali", "title": "E-commerce founder" },
+    { "quote": "Finally someone who explains in plain words and shows numbers. Our Shopify store converts better now.", "author": "R. Ahmed", "title": "D2C startup" }
+  ],
+  "faq": [
+    { "q": "What exactly does Open Agent do?", "a": "Open Agent helps e-commerce and D2C brands grow with Meta Ads, Shopify, AI automation, AI agents, AI content and web development. Think of it as an AI-powered marketing partner founded by Abeer Nasir." },
+    { "q": "Do you work with US-based businesses?", "a": "Yes. Abeer works remotely with US e-commerce and D2C founders. Communication is over WhatsApp, email or video call, and deliverables are aligned to US time zones where needed." },
+    { "q": "What's your pricing?", "a": "Three transparent monthly plans: Starter PKR 30,000/mo, Premium PKR 50,000/mo (most popular), and Pro PKR 80,000/mo. No hidden fees. Every plan has a 4-day money-back guarantee." },
+    { "q": "How long until we see results?", "a": "Meta Ads campaigns typically show early signal in 1-2 weeks; meaningful ROAS data in 3-4 weeks. Automation and content work land faster — often within the first week." },
+    { "q": "Do I need a big budget?", "a": "No. Abeer has run small-budget Meta Ads tests for D2C brands on just PKR 1,000 and lead-generation tests for local services on PKR 2,000 — and small budgets force discipline, which converts better. Plans start at PKR 30,000/mo." },
+    { "q": "Do you build chatbots and AI agents?", "a": "Yes — custom chatbots and virtual assistants for support and lead generation, built on LLMs like ChatGPT, Claude and Gemini. That's exactly what this chatbot is!" },
+    { "q": "Where are you based?", "a": "Karachi, Pakistan. Abeer works with clients worldwide remotely." },
+    { "q": "How do we communicate?", "a": "Fastest is WhatsApp at +92 370 3159642. Otherwise email (nasirmeo5533@gmail.com or abeerinfo5566@gmail.com) or the contact form on the website. Response within a few hours." },
+    { "q": "Do you do long contracts?", "a": "No lock-in. Open Agent starts with a clear project scope, then optimizes month by month. You can pause anytime." },
+    { "q": "Can you help my perfume or beauty brand?", "a": "Yes — Abeer has worked with e-commerce and D2C brands in perfume and beauty on Meta Ads, Shopify and content. It's one of his core niches." },
+    { "q": "What is your refund policy?", "a": "Every plan has a 4-day money-back guarantee. If you're not satisfied within the first 4 days, you get a full refund of the service fee, no questions asked." },
+    { "q": "What results have you delivered?", "a": "Key wins: 30 qualified sales for an e-commerce brand with PKR 1,000 ad spend (~3x ROAS), 6 qualified leads for a local service with PKR 2,000 budget, and an AI automation that saves a founder 2 hours every day." },
+    { "q": "Are you on social media?", "a": "Yes! Abeer is active on X (@Abeergrowth), Facebook (Abeer Nasir), Instagram (@growthbot_02), and LinkedIn (linkedin.com/in/abeer-nasir-3052b628a)." },
+    { "q": "Can I read your ebooks?", "a": "Yes — Abeer has written two free ebooks: 'Why Businesses Fail at Digital Marketing' (bit.ly/44sikZs) and 'The Generative AI Specialist Complete Guide' (bit.ly/4fmnlYC). Both are free to download." }
+  ],
+  "goals": {
+    "mission": "Help businesses use AI and digital marketing to improve their workflows, strengthen their online presence, and automate repetitive tasks — with clear, measurable results.",
+    "vision": "To be the go-to AI-powered marketing partner for D2C and e-commerce brands globally, known for practical strategies and real numbers, not hype."
+  },
+  "suggestions": [
+    "Who is Abeer Nasir?",
+    "What services do you offer?",
+    "Meta Ads pricing",
+    "Tell me about Open Agent",
+    "What results have you delivered?",
+    "How do you work with clients?",
+    "Chatbots and AI Agents",
+    "Your experience",
+    "What is your refund policy?",
+    "Contact information",
+    "Do you work with US clients?",
+    "Skills and expertise"
+  ]
+}

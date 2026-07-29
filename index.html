@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Abeer Nasir — Personal AI Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.app {
+  width: 100%;
+  max-width: 480px;
+  height: 100vh;
+  max-height: 812px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 40px rgba(0,0,0,0.06);
+  position: relative;
+  overflow: hidden;
+}
+@media(min-width:768px) {
+  .app { border-radius: 28px; height: 85vh; margin: 20px; box-shadow: 0 8px 60px rgba(0,0,0,0.1); }
+}
+
+/* Header */
+.header {
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid #e8e8ed;
+  flex-shrink: 0;
+  background: #fff;
+  position: relative;
+  z-index: 10;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.avatar {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, #1d1d1f, #3a3a3c);
+  border-radius: 50%;
+  display: flex;
+  align-items: center; justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.header-info h1 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.header-info .status {
+  font-size: 12px;
+  color: #86868b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 1px;
+}
+.status-dot {
+  width: 6px; height: 6px;
+  background: #30d158;
+  border-radius: 50%;
+  display: inline-block;
+}
+.header-sub {
+  font-size: 12px;
+  color: #86868b;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f2;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.header-sub span {
+  padding: 2px 10px;
+  background: #f5f5f7;
+  border-radius: 12px;
+  font-size: 11px;
+}
+
+/* Chat */
+.chat-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fff;
+  scroll-behavior: smooth;
+}
+.chat-area::-webkit-scrollbar { width: 4px; }
+.chat-area::-webkit-scrollbar-track { background: transparent; }
+.chat-area::-webkit-scrollbar-thumb { background: #d2d2d7; border-radius: 4px; }
+
+.message {
+  max-width: 92%;
+  padding: 12px 16px 10px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.55;
+  position: relative;
+  animation: msgIn 0.3s ease;
+}
+@keyframes msgIn { from{opacity:0;transform:translateY(8px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+.message.sent {
+  align-self: flex-end;
+  background: #1d1d1f;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.message.received {
+  align-self: flex-start;
+  background: #f5f5f7;
+  border-bottom-left-radius: 4px;
+}
+.message .time {
+  font-size: 9px;
+  color: #86868b;
+  margin-top: 4px;
+  opacity: 0.7;
+  letter-spacing: 0.2px;
+}
+.message.sent .time { color: rgba(255,255,255,0.4); }
+.message strong { font-weight: 600; }
+
+/* Typing */
+.typing {
+  align-self: flex-start;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 18px;
+  background: #f5f5f7;
+  border-radius: 18px;
+  border-bottom-left-radius: 4px;
+}
+.typing.show { display: flex; }
+.typing span {
+  width: 7px; height: 7px;
+  background: #c7c7cc;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out;
+}
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,80%,100%{transform:scale(0.6)} 40%{transform:scale(1)} }
+
+/* Welcome */
+.welcome {
+  text-align: center;
+  padding: 24px 16px 8px;
+  animation: fadeUp 0.6s ease;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.welcome .icon { font-size: 40px; margin-bottom: 8px; }
+.welcome h2 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+.welcome p {
+  font-size: 13px;
+  color: #86868b;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.welcome .tag {
+  display: inline-block;
+  padding: 3px 12px;
+  background: #f0f0f2;
+  border-radius: 12px;
+  font-size: 11px;
+  color: #86868b;
+  margin: 2px;
+}
+
+/* Suggestion chips (Google-style) */
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 0;
+  margin-top: 4px;
+}
+.suggestion-chip {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid #d2d2d7;
+  background: #fff;
+  color: #1d1d1f;
+  font-size: 12.5px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.suggestion-chip:hover {
+  background: #f5f5f7;
+  border-color: #1d1d1f;
+  transform: translateY(-1px);
+}
+.suggestion-chip:active { transform: scale(0.96); }
+
+/* Detail card */
+.detail-card {
+  background: #f5f5f7;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 4px 0 2px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.detail-card h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #1d1d1f;
+}
+.detail-card .label {
+  font-size: 11px;
+  color: #86868b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 8px 0 4px;
+}
+.detail-card .tag {
+  display: inline-block;
+  padding: 2px 10px;
+  background: #e8e8ed;
+  border-radius: 10px;
+  font-size: 11px;
+  margin: 2px;
+}
+.detail-card .price-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  margin: 6px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.detail-card .price-card .plan { font-weight: 600; }
+.detail-card .price-card .amount { font-weight: 700; color: #1d1d1f; }
+.detail-card .price-card .badge {
+  font-size: 10px;
+  background: #1d1d1f;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-left: 6px;
+}
+.detail-card .cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: #1d1d1f;
+  color: #fff;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 8px;
+  transition: all 0.2s;
+}
+.detail-card .cta:hover { background: #3a3a3c; transform: translateY(-1px); }
+.detail-card a { color: #1d1d1f; text-decoration: underline; }
+
+/* Quick reply area (bottom suggestions) */
+.quick-area {
+  padding: 6px 16px 4px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+.quick-area::-webkit-scrollbar { display: none; }
+
+/* Input */
+.input-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 14px;
+  border-top: 1px solid #e8e8ed;
+  flex-shrink: 0;
+  background: #fff;
+}
+.input-area input {
+  flex: 1;
+  padding: 11px 18px;
+  border-radius: 24px;
+  border: 1.5px solid #e8e8ed;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: all 0.2s;
+}
+.input-area input:focus { border-color: #1d1d1f; background: #fff; }
+.input-area input::placeholder { color: #86868b; }
+.send-btn {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #1d1d1f;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.send-btn:hover { background: #3a3a3c; transform: scale(1.05); }
+.send-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+/* Footer branding */
+.footer-brand {
+  font-size: 10px;
+  color: #c7c7cc;
+  text-align: center;
+  padding: 6px 0 10px;
+  flex-shrink: 0;
+  background: #fff;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <div class="header-top">
+      <div class="avatar">AN</div>
+      <div class="header-info">
+        <h1>Abeer Nasir</h1>
+        <div class="status"><span class="status-dot"></span> AI Agent · Knows Everything About Me</div>
+      </div>
+    </div>
+    <div class="header-sub">
+      <span>Generative AI Specialist</span>
+      <span>Open Agent</span>
+      <span>Digital Marketing</span>
+    </div>
+  </div>
+
+  <div class="chat-area" id="chatArea">
+    <div class="welcome" id="welcomeBlock">
+      <div class="icon">👋</div>
+      <h2>Hi, I'm Abeer's AI Agent</h2>
+      <p>I know everything about Abeer Nasir — his experience, skills, agency (Open Agent), services, pricing, case studies, and goals. Ask me anything about him.</p>
+      <div>
+        <span class="tag">🤖 AI Specialist</span>
+        <span class="tag">📊 Meta Ads</span>
+        <span class="tag">🛒 Shopify</span>
+        <span class="tag">⚡ AI Automation</span>
+        <span class="tag">🌐 Open Agent</span>
+      </div>
+      <div class="suggestions" id="welcomeSuggestions"></div>
+    </div>
+  </div>
+
+  <div class="typing" id="typing">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="quick-area" id="quickArea"></div>
+
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="Ask about Abeer, Open Agent, services..." autofocus>
+    <button class="send-btn" id="sendBtn">→</button>
+  </div>
+  <div class="footer-brand">Built with OpenCode · Personal AI Agent</div>
+</div>
+
+<script>
+const DATA_URL = 'data/personal-data.json';
+let data = null;
+
+// Load data
+async function loadData() {
+  try {
+    const res = await fetch(DATA_URL);
+    data = await res.json();
+    renderWelcomeSuggestions();
+    setQuickReplies(data.suggestions.slice(0, 6));
+  } catch(e) {
+    console.warn('Data load failed:', e);
+  }
+}
+
+// UI refs
+const chatArea = document.getElementById('chatArea');
+const typing = document.getElementById('typing');
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
+const quickArea = document.getElementById('quickArea');
+const welcomeBlock = document.getElementById('welcomeBlock');
+
+function getTime() {
+  const d = new Date();
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+
+function addMessage(html, type) {
+  if (welcomeBlock) welcomeBlock.remove();
+  const div = document.createElement('div');
+  div.className = 'message ' + type;
+  div.innerHTML = html + '<div class="time">' + getTime() + '</div>';
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function addAgentMessage(html) {
+  addMessage(html, 'received');
+}
+
+function addUserMessage(text) {
+  addMessage(text, 'sent');
+}
+
+function addDetailCard(html) {
+  const div = document.createElement('div');
+  div.className = 'message received';
+  div.innerHTML = '<div class="detail-card">' + html + '</div><div class="time">' + getTime() + '</div>';
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function showTyping() { typing.classList.add('show'); chatArea.scrollTop = chatArea.scrollHeight; }
+function hideTyping() { typing.classList.remove('show'); }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function normalize(t) { return t.toLowerCase().trim().replace(/[^a-z0-9\s]/g,''); }
+
+// Matching engine
+function matchQuery(query) {
+  if (!data) return null;
+  const nq = normalize(query);
+  const tokens = nq.split(/\s+/).filter(t => t.length > 1);
+
+  // Check FAQs first
+  const faqMatch = matchFAQ(nq, tokens);
+  if (faqMatch) return { type: 'faq', data: faqMatch };
+
+  // Check intents
+  const intent = detectIntent(nq, tokens);
+  return { type: 'intent', data: intent };
+}
+
+function matchFAQ(nq, tokens) {
+  let best = null, bestScore = 0;
+  for (const item of data.faq) {
+    let score = 0;
+    const qn = normalize(item.q);
+    if (nq === qn) score += 50;
+    else if (nq.includes(qn) || qn.includes(nq)) score += 30;
+    else {
+      const qt = qn.split(/\s+/);
+      for (const t of tokens) {
+        for (const q of qt) {
+          if (t === q) score += 8;
+          else if (q.includes(t) || t.includes(q)) score += 4;
+        }
+      }
+    }
+    if (score > bestScore) { bestScore = score; best = item; }
+  }
+  return bestScore >= 5 ? best : null;
+}
+
+function detectIntent(nq, tokens) {
+  // Greeting
+  if (/\b(hi|hello|hey|assalam|salam|good morning|good evening|good day)\b/.test(nq)) {
+    return { type: 'greeting' };
+  }
+  // Goodbye
+  if (/\b(bye|goodbye|thanks|thank you|see you|farewell)\b/.test(nq)) {
+    return { type: 'goodbye' };
+  }
+  // Who is / about
+  if (/\b(who is|about|tell me about|introduce|bio|background|story)\b/.test(nq) && (/\b(abeer|nasir|you|yourself|founder)\b/.test(nq) || tokens.length <= 3)) {
+    return { type: 'about' };
+  }
+  // Agency info
+  if (/\b(open agent|agency|company|firm|practice|your agency|your company)\b/.test(nq)) {
+    return { type: 'agency' };
+  }
+  // Services
+  if (/\b(service|offer|what do you|what you do|capabilities|can you help|provide)\b/.test(nq)) {
+    return { type: 'services' };
+  }
+  // Specific service
+  if (/\b(meta ads|facebook ads|instagram ads|fb ads|social media ads)\b/.test(nq)) return { type: 'service_detail', service: 'Meta Ads' };
+  if (/\b(shopify|store|ecommerce|e-commerce|online store)\b/.test(nq)) return { type: 'service_detail', service: 'Shopify Development' };
+  if (/\b(ai automation|automation|workflow|zapier|make|n8n)\b/.test(nq)) return { type: 'service_detail', service: 'AI Automation' };
+  if (/\b(chatbot|chat bot|ai agent|virtual assistant|bot|assistant)\b/.test(nq)) return { type: 'service_detail', service: 'AI Agents' };
+  if (/\b(ai content|content|copy|writing|blog|social post|email copy)\b/.test(nq)) return { type: 'service_detail', service: 'AI Content' };
+  if (/\b(web dev|website|web development|site)\b/.test(nq)) return { type: 'service_detail', service: 'Web Development' };
+  if (/\b(google ads|paid ads|ppc|search ads|display ads)\b/.test(nq)) return { type: 'service_detail', service: 'Paid Ads — Google & Meta' };
+  if (/\b(social media|organic|content calendar|community management)\b/.test(nq)) return { type: 'service_detail', service: 'Social Media' };
+  // Pricing
+  if (/\b(price|pricing|cost|rate|plan|package|how much|fee|charges|budget)\b/.test(nq)) {
+    return { type: 'pricing' };
+  }
+  // Experience
+  if (/\b(experience|background|career|work history|timeline|journey|how long|started|begin)\b/.test(nq)) {
+    return { type: 'experience' };
+  }
+  // Skills
+  if (/\b(skill|expertise|competenc|know|proficient|good at|specialist|specialize)\b/.test(nq)) {
+    return { type: 'skills' };
+  }
+  // Case studies / results
+  if (/\b(case study|result|achievement|win|project|work|client|outcome|proof|numbers|roas)\b/.test(nq)) {
+    return { type: 'case_studies' };
+  }
+  // Testimonials
+  if (/\b(testimonial|review|feedback|client say|what people|founder say|quote)\b/.test(nq)) {
+    return { type: 'testimonials' };
+  }
+  // Contact
+  if (/\b(contact|email|phone|call|reach|whatsapp|number|address|location)\b/.test(nq)) {
+    return { type: 'contact' };
+  }
+  // Social media
+  if (/\b(social|linkedin|twitter|x\.com|instagram|facebook|follow|page)\b/.test(nq)) {
+    return { type: 'social' };
+  }
+  // eBooks
+  if (/\b(ebook|book|guide|free|download|read|publication|write|author)\b/.test(nq)) {
+    return { type: 'ebooks' };
+  }
+  // Goals/mission
+  if (/\b(goal|mission|vision|future|plan|aim|purpose|what you want)\b/.test(nq)) {
+    return { type: 'goals' };
+  }
+  // Refund
+  if (/\b(refund|guarantee|money back|satisfied)\b/.test(nq)) {
+    return { type: 'refund' };
+  }
+  // Website
+  if (/\b(website|site|url|online|web|link)\b/.test(nq) && !/\b(web dev|development)\b/.test(nq)) {
+    return { type: 'website' };
+  }
+  // Help
+  if (/\b(help|what can you|what do you|options|menu|commands|capabilities)\b/.test(nq)) {
+    return { type: 'help' };
+  }
+
+  return { type: 'general' };
+}
+
+// Response builders
+function buildResponse(intent) {
+  switch (intent.type) {
+    case 'greeting':
+      return '<strong>Hey there! 👋</strong> I\'m the AI agent for <strong>Abeer Nasir</strong> — a Generative AI Specialist & Digital Marketing Specialist. I know everything about his experience, skills, agency (Open Agent), services, pricing, and results. What would you like to know?';
+
+    case 'goodbye':
+      return 'Thanks for chatting! 🙌 If you want to work with Abeer, reach out on WhatsApp at <strong>+92 370 3159642</strong> or visit <a href="https://open-agent-eight.vercel.app" style="color:#1d1d1f;"><strong>open-agent-eight.vercel.app</strong></a>. Have a great day!';
+
+    case 'help':
+      return 'I can answer questions about:<br><br>👤 <strong>About Abeer</strong> — Bio, story, background<br>🏢 <strong>Open Agent</strong> — His agency<br>📋 <strong>Services</strong> — Meta Ads, Shopify, AI, Web<br>💰 <strong>Pricing</strong> — Plans and packages<br>📈 <strong>Results</strong> — Case studies, achievements<br>💡 <strong>Skills</strong> — Expertise and competencies<br>📞 <strong>Contact</strong> — How to reach him<br><br>Just ask me anything!';
+
+    case 'about':
+      return '<strong>Abeer Nasir</strong> — Generative AI Specialist & Digital Marketing Specialist<br><br>' +
+             data.person.bio + '<br><br>' +
+             '📍 ' + data.person.location + '<br>' +
+             '📧 ' + data.person.email + '<br>' +
+             '📱 ' + data.person.phone + '<br><br>' +
+             '<em>"' + data.person.story.split('. ').slice(0, 3).join('. ') + '."</em>';
+
+    case 'agency':
+      return '<strong>🏢 Open Agent</strong><br><br>' +
+             data.agency.description + '<br><br>' +
+             '📅 Established: ' + data.agency.established + '<br>' +
+             '🏷️ ' + data.agency.tagline + '<br><br>' +
+             '<strong>How it works:</strong><br>' +
+             data.agency.process.map(p => '• <strong>' + p.title + ':</strong> ' + p.description).join('<br>');
+
+    case 'services':
+      let html = '<strong>📋 Services Offered</strong><br><br>';
+      data.services.forEach(s => {
+        html += s.icon + ' <strong>' + s.name + '</strong><br>' + s.description + '<br><br>';
+      });
+      html += 'Want details on any specific service? Just ask!';
+      return html;
+
+    case 'service_detail':
+      const svc = data.services.find(s => s.name === intent.service);
+      if (!svc) return 'I couldn\'t find that specific service. Here are all services: ' + data.services.map(s => s.name).join(', ');
+      return svc.icon + ' <strong>' + svc.name + '</strong><br><br>' + svc.description + '<br><br>Want to get started? <a href="https://open-agent-eight.vercel.app/contact.html" style="color:#1d1d1f;"><strong>Contact Abeer</strong></a>';
+
+    case 'pricing':
+      let phtml = '<strong>💰 Pricing Plans</strong><br><br>';
+      phtml += '<em>' + data.agency.refund + '</em><br><br>';
+      data.agency.pricing.forEach(p => {
+        phtml += '<div class="price-card"><div><span class="plan">' + p.plan + '</span>' + (p.badge ? ' <span class="badge">' + p.badge + '</span>' : '') + '<br><span style="font-size:12px;color:#86868b;">' + p.features[0] + '</span></div><div class="amount">' + p.price + '</div></div>';
+      });
+      phtml += '<a href="https://open-agent-eight.vercel.app/pricing.html" class="cta">View Full Pricing →</a>';
+      return phtml;
+
+    case 'experience':
+      let ehtml = '<strong>💼 Experience</strong><br><br>';
+      data.experience.forEach(e => {
+        ehtml += '<strong>' + e.role + '</strong> · ' + e.type + '<br>';
+        ehtml += '📅 ' + e.period + (e.location ? ' · 📍 ' + e.location : '') + '<br>';
+        e.details.forEach(d => ehtml += '• ' + d + '<br>');
+        ehtml += '<br>';
+      });
+      return ehtml;
+
+    case 'skills':
+      let shtml = '<strong>💡 Skills & Expertise</strong><br><br>';
+      data.skills.forEach(sk => {
+        shtml += '<div class="label">' + sk.category + '</div>';
+        shtml += sk.items.map(i => '<span class="tag">' + i + '</span>').join('') + '<br><br>';
+      });
+      return shtml;
+
+    case 'case_studies':
+      let chtml = '<strong>📈 Results & Case Studies</strong><br><br>';
+      data.caseStudies.forEach(cs => {
+        chtml += '<strong>' + cs.title + '</strong><br>';
+        chtml += '🎯 ' + cs.niche + '<br>';
+        chtml += '📊 Result: <strong>' + cs.result + '</strong><br>';
+        if (cs.spend) chtml += '💰 Spend: ' + cs.spend + (cs.roas ? ' · ' + cs.roas : '') + '<br>';
+        chtml += cs.whatIdid + '<br><br>';
+      });
+      return chtml;
+
+    case 'testimonials':
+      let thtml = '<strong>💬 What Founders Say</strong><br><br>';
+      data.testimonials.forEach(t => {
+        thtml += '<em>"' + t.quote + '"</em><br>';
+        thtml += '— <strong>' + t.author + '</strong>, ' + t.title + '<br><br>';
+      });
+      return thtml;
+
+    case 'contact':
+      return '<strong>📞 Contact Information</strong><br><br>' +
+             '📧 Email: <a href="mailto:' + data.person.email + '" style="color:#1d1d1f;">' + data.person.email + '</a><br>' +
+             '📧 Alt Email: ' + data.person.email2 + '<br>' +
+             '📱 WhatsApp: <a href="https://wa.me/' + data.person.whatsapp.replace(/[^0-9]/g,'') + '" style="color:#1d1d1f;">' + data.person.phone + '</a><br>' +
+             '🌐 Website: <a href="' + data.person.website + '" style="color:#1d1d1f;">open-agent-eight.vercel.app</a><br>' +
+             '📍 Location: ' + data.person.location;
+
+    case 'social':
+      return '<strong>🔗 Social Media</strong><br><br>' +
+             '🔵 LinkedIn: <a href="' + data.person.social.linkedin + '" style="color:#1d1d1f;">abeer-nasir-3052b628a</a><br>' +
+             '🐦 X/Twitter: <a href="' + data.person.social.twitter + '" style="color:#1d1d1f;">@Abeergrowth</a><br>' +
+             '📘 Facebook: <a href="' + data.person.social.facebook + '" style="color:#1d1d1f;">Abeer Nasir</a><br>' +
+             '📸 Instagram: <a href="' + data.person.social.instagram + '" style="color:#1d1d1f;">@growthbot_02</a>';
+
+    case 'ebooks':
+      return '<strong>📚 Free eBooks by Abeer Nasir</strong><br><br>' +
+             '📘 <strong>Why Businesses Fail at Digital Marketing</strong><br>🔗 <a href="https://bit.ly/44sikZs" style="color:#1d1d1f;">bit.ly/44sikZs</a><br><br>' +
+             '📗 <strong>The Generative AI Specialist Complete Guide</strong><br>🔗 <a href="https://bit.ly/4fmnlYC" style="color:#1d1d1f;">bit.ly/4fmnlYC</a><br><br>' +
+             'Both are completely free — download and read!';
+
+    case 'goals':
+      return '<strong>🎯 Mission</strong><br>' + data.goals.mission + '<br><br><strong>👁️ Vision</strong><br>' + data.goals.vision;
+
+    case 'refund':
+      return data.agency.refund;
+
+    case 'website':
+      return '🌐 Visit <a href="' + data.person.website + '" style="color:#1d1d1f;"><strong>open-agent-eight.vercel.app</strong></a> to explore the full site — services, pricing, portfolio, case studies, blog, and more.';
+
+    default:
+      return null;
+  }
+}
+
+function handleGeneralQuery(nq, tokens) {
+  // Try matching against all FAQ
+  const faq = matchFAQ(nq, tokens);
+  if (faq) return { type: 'faq', data: faq };
+
+  // Try matching against services
+  for (const s of data.services) {
+    const sn = normalize(s.name);
+    if (nq.includes(sn)) return { type: 'service_detail', service: s.name };
+  }
+
+  // Try matching against skills
+  for (const sk of data.skills) {
+    for (const item of sk.items) {
+      const in_ = normalize(item);
+      if (nq.includes(in_)) {
+        return buildResponse({ type: 'skills' });
+      }
+    }
+  }
+
+  // Check for price in query
+  if (/\b(price|cost|rate|how much)\b/.test(nq)) return buildResponse({ type: 'pricing' });
+
+  return null;
+}
+
+async function handleSend() {
+  const text = userInput.value.trim();
+  if (!text || !data) return;
+  userInput.value = '';
+  addUserMessage(text);
+  sendBtn.disabled = true;
+
+  await sleep(200 + Math.random() * 300);
+  showTyping();
+  await sleep(300 + Math.random() * 500);
+  hideTyping();
+
+  const result = matchQuery(text);
+  let response = null;
+
+  if (result && result.type === 'faq') {
+    response = '<strong>' + result.data.q + '</strong><br><br>' + result.data.a;
+  } else if (result && result.type === 'intent') {
+    response = buildResponse(result.data);
+  }
+
+  if (!response) {
+    const nq = normalize(text);
+    const tokens = nq.split(/\s+/).filter(t => t.length > 1);
+    response = handleGeneralQuery(nq, tokens);
+  }
+
+  if (response) {
+    addAgentMessage(response);
+  } else {
+    addAgentMessage('I\'m not sure about that. Here are some things you can ask me:<br><br>' +
+      data.suggestions.slice(0, 6).map(s => '• ' + s).join('<br>'));
+  }
+
+  // Show relevant suggestions after response
+  const suggestions = getContextSuggestions(text);
+  setQuickReplies(suggestions);
+
+  sendBtn.disabled = false;
+  userInput.focus();
+}
+
+function getContextSuggestions(query) {
+  const nq = normalize(query);
+  if (/\b(service|offer|what do you)\b/.test(nq)) return ['Meta Ads pricing', 'AI Agents', 'Shopify development', 'Case studies'];
+  if (/\b(price|pricing|cost|plan|package)\b/.test(nq)) return ['Starter plan details', 'Premium plan', 'What\'s included?', 'Refund policy'];
+  if (/\b(abeer|about|you|yourself|founder)\b/.test(nq)) return ['Your experience', 'Your skills', 'Open Agent', 'Case studies'];
+  if (/\b(result|case study|achievement|proof)\b/.test(nq)) return ['Meta Ads results', 'AI automation case', 'Shopify work', 'Contact Abeer'];
+  if (/\b(contact|email|phone|whatsapp)\b/.test(nq)) return ['Your website', 'Social media', 'Services', 'Pricing'];
+  return data.suggestions.slice(0, 4);
+}
+
+function renderWelcomeSuggestions() {
+  if (!data) return;
+  const container = document.getElementById('welcomeSuggestions');
+  const chips = data.suggestions.slice(0, 6);
+  container.innerHTML = chips.map(s => '<div class="suggestion-chip" data-q="' + s + '">' + s + '</div>').join('');
+  container.querySelectorAll('.suggestion-chip').forEach(el => {
+    el.addEventListener('click', () => { userInput.value = el.dataset.q; handleSend(); });
+  });
+}
+
+function setQuickReplies(suggestions) {
+  quickArea.innerHTML = suggestions.map(s => '<div class="suggestion-chip" style="font-size:12px;padding:6px 12px;flex-shrink:0;" data-q="' + s + '">' + s + '</div>').join('');
+  quickArea.querySelectorAll('.suggestion-chip').forEach(el => {
+    el.addEventListener('click', () => { userInput.value = el.dataset.q; handleSend(); });
+  });
+}
+
+sendBtn.addEventListener('click', handleSend);
+userInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSend(); });
+
+loadData();
+</script>
+</body>
+</html>
