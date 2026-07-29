@@ -515,13 +515,24 @@ function detectIntent(nq, tokens) {
   }
   // Specific service
   if (/\b(meta ads|facebook ads|instagram ads|fb ads|social media ads)\b/.test(nq)) return { type: 'service_detail', service: 'Meta Ads' };
-  if (/\b(shopify|store|ecommerce|e-commerce|online store)\b/.test(nq)) return { type: 'service_detail', service: 'Shopify Development' };
-  if (/\b(ai automation|automation|workflow|zapier|make|n8n)\b/.test(nq)) return { type: 'service_detail', service: 'AI Automation' };
+  if (/\b(shopify|store|ecommerce|e-commerce|online store|product page|checkout|cro|conversion)\b/.test(nq)) return { type: 'service_detail', service: 'Shopify Development' };
+  if (/\b(ai automation|automation|workflow|zapier|make|n8n|automate|workflow|repetitive|manual)\b/.test(nq)) return { type: 'service_detail', service: 'AI Automation' };
   if (/\b(chatbot|chat bot|ai agent|virtual assistant|bot|assistant)\b/.test(nq)) return { type: 'service_detail', service: 'AI Agents' };
-  if (/\b(ai content|content|copy|writing|blog|social post|email copy)\b/.test(nq)) return { type: 'service_detail', service: 'AI Content' };
-  if (/\b(web dev|website|web development|site)\b/.test(nq)) return { type: 'service_detail', service: 'Web Development' };
-  if (/\b(google ads|paid ads|ppc|search ads|display ads)\b/.test(nq)) return { type: 'service_detail', service: 'Paid Ads — Google & Meta' };
-  if (/\b(social media|organic|content calendar|community management)\b/.test(nq)) return { type: 'service_detail', service: 'Social Media' };
+  if (/\b(ai content|content|copy|writing|blog|social post|email copy|ad copy|creative)\b/.test(nq)) return { type: 'service_detail', service: 'AI Content' };
+  if (/\b(web dev|website|web development|site|redesign)\b/.test(nq)) return { type: 'service_detail', service: 'Web Development' };
+  if (/\b(google ads|paid ads|ppc|search ads|display ads|google search)\b/.test(nq)) return { type: 'service_detail', service: 'Paid Ads — Google & Meta' };
+  if (/\b(social media|organic|content calendar|community management|instagram|reels)\b/.test(nq)) return { type: 'service_detail', service: 'Social Media' };
+  // New intents for expanded data
+  if (/\b(nda|confidential|sign|agreement|privacy)\b/.test(nq)) return { type: 'nda' };
+  if (/\b(payment|pay|wise|paypal|easypaisa|jazzcash|bank transfer|method)\b/.test(nq)) return { type: 'payment' };
+  if (/\b(tool|platform|software|stack|tech|what do you use)\b/.test(nq)) return { type: 'tools' };
+  if (/\b(how is.*different|why.*you|what makes|unique|vs|versus|compared|compare|better)\b/.test(nq)) return { type: 'difference' };
+  if (/\b(hour|hourly|consulting|consult|strategy call)\b/.test(nq)) return { type: 'consulting' };
+  if (/\b(usd|dollar|\$|international)\b/.test(nq)) return { type: 'usd' };
+  if (/\b(language|english|urdu)\b/.test(nq)) return { type: 'languages' };
+  if (/\b(minimum|commitment|lock.in|contract|how long.*work|cancel|pause)\b/.test(nq)) return { type: 'commitment' };
+  if (/\b(niche|industry|sector|domain|specializ|focus|expertise.*area)\b/.test(nq)) return { type: 'niche' };
+  if (/\b(one.time|project.based|fixed|quote|scope|specific project)\b/.test(nq)) return { type: 'project' };
   // Pricing
   if (/\b(price|pricing|cost|rate|plan|package|how much|fee|charges|budget)\b/.test(nq)) {
     return { type: 'pricing' };
@@ -598,9 +609,11 @@ function buildResponse(intent) {
       return '<strong>🏢 Open Agent</strong><br><br>' +
              data.agency.description + '<br><br>' +
              '📅 Established: ' + data.agency.established + '<br>' +
-             '🏷️ ' + data.agency.tagline + '<br><br>' +
+             '🏷️ ' + data.agency.tagline + '<br>' +
+             '👤 ' + data.agency.structure + '<br><br>' +
              '<strong>How it works:</strong><br>' +
-             data.agency.process.map(p => '• <strong>' + p.title + ':</strong> ' + p.description).join('<br>');
+             data.agency.process.map(p => '• <strong>' + p.title + ':</strong> ' + p.description).join('<br>') + '<br><br>' +
+             '<strong>Engagement:</strong> ' + data.agency.engagement;
 
     case 'services':
       let html = '<strong>📋 Services Offered</strong><br><br>';
@@ -613,14 +626,21 @@ function buildResponse(intent) {
     case 'service_detail':
       const svc = data.services.find(s => s.name === intent.service);
       if (!svc) return 'I couldn\'t find that specific service. Here are all services: ' + data.services.map(s => s.name).join(', ');
-      return svc.icon + ' <strong>' + svc.name + '</strong><br><br>' + svc.description + '<br><br>Want to get started? <a href="https://open-agent-eight.vercel.app/contact.html" style="color:#1d1d1f;"><strong>Contact Abeer</strong></a>';
+      let svcHtml = svc.icon + ' <strong>' + svc.name + '</strong><br><br>' + svc.description + '<br><br>';
+      if (svc.details) svcHtml += '<strong>What\'s included:</strong><br>' + svc.details.map(d => '• ' + d).join('<br>') + '<br><br>';
+      if (svc.examples) svcHtml += '<strong>📌 Examples:</strong><br>' + svc.examples.map(e => '• ' + e).join('<br>') + '<br><br>';
+      if (svc.tools) svcHtml += '<strong>🔧 Tools:</strong> ' + svc.tools.join(', ') + '<br><br>';
+      svcHtml += '<a href="https://open-agent-eight.vercel.app/contact.html" style="color:#1d1d1f;"><strong>Want this service? Contact Abeer →</strong></a>';
+      return svcHtml;
 
     case 'pricing':
       let phtml = '<strong>💰 Pricing Plans</strong><br><br>';
       phtml += '<em>' + data.agency.refund + '</em><br><br>';
       data.agency.pricing.forEach(p => {
-        phtml += '<div class="price-card"><div><span class="plan">' + p.plan + '</span>' + (p.badge ? ' <span class="badge">' + p.badge + '</span>' : '') + '<br><span style="font-size:12px;color:#86868b;">' + p.features[0] + '</span></div><div class="amount">' + p.price + '</div></div>';
+        phtml += '<div class="price-card"><div><span class="plan">' + p.plan + '</span>' + (p.badge ? ' <span class="badge">' + p.badge + '</span>' : '') + '<br><span style="font-size:12px;color:#86868b;">' + p.features[0] + '</span></div><div class="amount">PKR ' + Number(p.pricePKR).toLocaleString() + '/mo</div></div>';
       });
+      phtml += '<br><strong>USD:</strong> Starter ~$' + data.agency.pricing[0].priceUSD + '/mo, Premium ~$' + data.agency.pricing[1].priceUSD + '/mo, Pro ~$' + data.agency.pricing[2].priceUSD + '/mo<br><br>';
+      phtml += '<strong>No lock-in.</strong> Month-to-month. Cancel anytime.<br>';
       phtml += '<a href="https://open-agent-eight.vercel.app/pricing.html" class="cta">View Full Pricing →</a>';
       return phtml;
 
@@ -636,10 +656,12 @@ function buildResponse(intent) {
 
     case 'skills':
       let shtml = '<strong>💡 Skills & Expertise</strong><br><br>';
-      data.skills.forEach(sk => {
-        shtml += '<div class="label">' + sk.category + '</div>';
-        shtml += sk.items.map(i => '<span class="tag">' + i + '</span>').join('') + '<br><br>';
-      });
+      for (const key in data.skills) {
+        const sk = data.skills[key];
+        shtml += '<div class="label">' + sk.label + '</div>';
+        shtml += sk.items.map(i => '<span class="tag">' + i.name + '</span>').join('') + '<br>';
+      }
+      shtml += '<br><em>Ask me about any specific skill for details!</em>';
       return shtml;
 
     case 'case_studies':
@@ -649,7 +671,7 @@ function buildResponse(intent) {
         chtml += '🎯 ' + cs.niche + '<br>';
         chtml += '📊 Result: <strong>' + cs.result + '</strong><br>';
         if (cs.spend) chtml += '💰 Spend: ' + cs.spend + (cs.roas ? ' · ' + cs.roas : '') + '<br>';
-        chtml += cs.whatIdid + '<br><br>';
+        chtml += (cs.approach || cs.whatIdid) + '<br><br>';
       });
       return chtml;
 
@@ -691,6 +713,42 @@ function buildResponse(intent) {
     case 'website':
       return '🌐 Visit <a href="' + data.person.website + '" style="color:#1d1d1f;"><strong>open-agent-eight.vercel.app</strong></a> to explore the full site — services, pricing, portfolio, case studies, blog, and more.';
 
+    case 'nda':
+      return '<strong>📝 NDAs & Confidentiality</strong><br><br>Yes — Abeer is happy to sign NDAs and confidentiality agreements. Client privacy is taken seriously. Just ask during the strategy call.';
+
+    case 'payment':
+      return '<strong>💳 Payment Methods</strong><br><br>' + data.agency.paymentMethods.map(m => '• ' + m).join('<br>') + '<br><br>Contact Abeer on WhatsApp for specific payment arrangements.';
+
+    case 'tools':
+      let toolsHtml = '<strong>🔧 Tools & Platforms</strong><br><br>Abeer uses:<br>';
+      const allTools = new Set();
+      data.services.forEach(s => (s.tools||[]).forEach(t => allTools.add(t)));
+      toolsHtml += Array.from(allTools).map(t => '• ' + t).join('<br>');
+      return toolsHtml;
+
+    case 'difference':
+      return '<strong>Why Open Agent?</strong><br><br>' + data.person.difference + '<br><br>Also: (1) Combines AI AND marketing expertise — rare combo. (2) Transparent pricing with 4-day refund. (3) Documented outcomes with real numbers.';
+
+    case 'consulting':
+      return '<strong>📞 Consulting & Strategy Calls</strong><br><br>First 20-min strategy call is <strong>free</strong>. For deeper paid consulting sessions, contact Abeer on WhatsApp to discuss scope and pricing.';
+
+    case 'usd':
+      return '<strong>💰 USD Pricing</strong><br><br>Starter: ~$' + data.agency.pricing[0].priceUSD + '/month<br>Premium: ~$' + data.agency.pricing[1].priceUSD + '/month (most popular)<br>Pro: ~$' + data.agency.pricing[2].priceUSD + '/month<br><br>Payment via Wise or PayPal. 4-day money-back guarantee on all plans.';
+
+    case 'languages':
+      return '<strong>🗣️ Languages</strong><br><br>Abeer speaks <strong>' + data.person.languages.join(' and ') + '</strong>. Client communication is primarily in English.';
+
+    case 'commitment':
+      return '<strong>📋 Commitment & Contracts</strong><br><br>' + data.agency.minimumCommitment;
+
+    case 'niche':
+      return '<strong>🎯 Niche & Industry Expertise</strong><br><br>Abeer\'s primary focus:<br>' +
+             data.agency.clients.map(c => '• ' + c).join('<br>') +
+             '<br><br>Deepest experience in <strong>perfume & beauty D2C</strong>. Contact him to discuss fit for your specific industry.';
+
+    case 'project':
+      return '<strong>📌 One-Time Projects</strong><br><br>Yes — one-time projects are available for:<br>• Website builds & redesigns<br>• Automation setup<br>• Chatbot creation<br>• Store optimization<br><br>Contact Abeer with your scope for a fixed-price quote.';
+
     default:
       return null;
   }
@@ -708,9 +766,10 @@ function handleGeneralQuery(nq, tokens) {
   }
 
   // Try matching against skills
-  for (const sk of data.skills) {
+  for (const key in data.skills) {
+    const sk = data.skills[key];
     for (const item of sk.items) {
-      const in_ = normalize(item);
+      const in_ = normalize(item.name);
       if (nq.includes(in_)) {
         return buildResponse({ type: 'skills' });
       }
